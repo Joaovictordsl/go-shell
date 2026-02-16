@@ -24,6 +24,18 @@ func main() {
 
 		if r.Method == "POST" {
 			var newRes Response
+
+			err := json.NewDecoder(r.Body).Decode(&newRes)
+			if err != nil {
+				http.Error(w, "JSON invalido", http.StatusBadRequest)
+			}
+
+			database = append(database, newRes)
+
+			w.WriteHeader(http.StatusCreated)
+			json.NewEncoder(w).Encode(newRes)
+			return
+
 		}
 	})
 
